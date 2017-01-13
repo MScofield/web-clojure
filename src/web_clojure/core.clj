@@ -18,8 +18,8 @@
                [:input {:type "text" :placeholder "Log Sender" :name "sender"}]
                [:button {:type "submit"} "Check Code"]]
               [:ol
-               (map (fn [authenticode]
-                      [:li authenticode])
+               (map (fn [authenticode] (get authenticode :authenticode)
+                      [:li authenticode (get authenticode :authenticode)])
                  @authenticodes)]]]))
   
   (c/POST "/add-authenticode" request
