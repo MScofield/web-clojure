@@ -12,15 +12,21 @@
 (c/defroutes app
   (c/GET "/" []
     (h/html [:html]
-            [:body
+            [:body 
+             [:h2 "Authenticate Each Message Received with AuthentiCode!!!"]
              [:form {:action "/add-authenticode" :method "post"}
-              [:input {:type "text" :placeholder "Enter Code" :name "authenticode"}
-               [:input {:type "text" :placeholder "Log Sender" :name "sender"}]
-               [:button {:type "submit"} "Check Code"]]
-              [:ol
-               (map (fn [authenticode] (get authenticode :authenticode)
-                      [:li authenticode (get authenticode :authenticode)])
-                 @authenticodes)]]]))
+              [:input {:type "text" :placeholder "Enter AuthentiCode" :name "authenticode"}"\u00A0"
+               [:input {:type "text" :placeholder "Log Sender" :name "sender"}]"\u00A0"
+               [:button {:type "submit"} "Check Code"]] 
+              [:hr]
+              [:table (:style "border: 0; width: 90%")
+               [:tr [:th "Code Log""\u00A0 \u00A0 \u00A0"][:th "Sender Log""\u00A0 \u00A0 \u00A0"][:th "Authenticity Confirmation"]]
+               [:td
+                     (map (fn [authenticode] (get authenticode :authenticode)
+                            (get authenticode :sender)
+                            [:tr authenticode [:td (get authenticode :authenticode)]
+                             [:td (get authenticode :sender)]])
+                       @authenticodes)]]]]))
   
   (c/POST "/add-authenticode" request
     (let [params (get request :params)
